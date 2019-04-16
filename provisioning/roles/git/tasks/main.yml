@@ -1,0 +1,22 @@
+---
+# file: main.yml
+
+- name: Install git
+  yum:
+    name: git
+    state: installed
+
+- name: Clone repo
+  become: yes
+  become_user: "{{ cowrie_user }}"
+  git:
+    repo: "{{ cowrie_repo_url }}"
+    dest: "{{ cowrie_location }}"
+    version: "no_daemon"
+
+- name: Ensure cowrie ownership
+  file:
+    path: "{{ cowrie_location }}"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+

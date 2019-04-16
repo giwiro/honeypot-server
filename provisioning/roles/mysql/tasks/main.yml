@@ -1,0 +1,61 @@
+---
+# file: main.yml
+- name: Add required packages (mysql)
+  yum:
+    name: https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm
+    state: present
+
+# - name: Delete mariadb
+# yum:
+# name: mariadb-libs
+# state: removed
+
+- name: Install MySQL
+  yum:
+    state: installed
+    name:
+        - mysql-server
+        - mysql-community-devel
+        - MySQL-python
+
+- name: Enable mysql
+  systemd:
+    name: mysqld
+    state: restarted
+    enabled: yes
+
+- name: Get root password
+  shell: "grep 'A temporary password is generated for root@localhost' /var/log/mysqld.log | awk -F ' ' '{print $(NF)}'"
+  register: root_password
+
+- debug: msg="{{ root_password.stdout }}"
+
+- name: Save root password
+  shell: "echo '{{ root_password.stdout }}' > /root/mysql_root_default_password"
+
+- name: Update expired root user password
+  command: mysql --user root --password={{ root_password.stdout }} --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password.stdout }}';"
+
+- name: Create mysql database
+  mysql_db:
+    name: "{{ cowrie_mysql_name }}"
+    state: present
+    login_user: root
+    login_password: "{{ root_password.stdout }}"
+
+- name: Execute sql file
+  mysql_db:
+    name: "{{ cowrie_mysql_name }}"
+    state: import
+    target: "{{ cowrie_location }}/docs/sql/mysql.sql"
+    login_user: root
+    login_password: "{{ root_password.stdout }}"
+
+- name: Create mysql client user
+  mysql_user:
+    login_user: root
+    login_password: "{{ root_password.stdout }}"
+    name: "{{ cowrie_mysql_user }}"
+    password: "{{ cowrie_mysql_password }}"
+    priv: "cowrie.*:INSERT,SELECT,UPDATE,GRANT"
+    state: present

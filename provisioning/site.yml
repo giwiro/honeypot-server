@@ -1,0 +1,14 @@
+---
+# file: site.yml
+- hosts: honeypot
+  become: yes
+  become_method: sudo
+  roles:
+    - os
+    - nginx
+    - python
+    - git
+    - mysql
+    - sshd
+    - cowrie
+    - iptables

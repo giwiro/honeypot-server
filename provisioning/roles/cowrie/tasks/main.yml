@@ -1,0 +1,59 @@
+---
+# file: main.yml
+
+- name: Ensure cowrie ownership
+  file:
+    path: "{{ cowrie_location }}"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+
+- name: Ensure prereq Python packages in Virtual Environment
+  become: true
+  become_user: "{{ cowrie_user }}"
+  pip:
+    name: ['pip>9', 'setuptools>18.5']
+    virtualenv: "{{ cowrie_venv }}"
+    virtualenv_python: "python2"
+    state: present
+
+- name: Ensure requirements.txt Python packages in Virtual Environment
+  become: true
+  become_user: "{{ cowrie_user }}"
+  pip:
+    requirements: "{{ cowrie_location }}/requirements.txt"
+    virtualenv: "{{ cowrie_venv }}"
+    state: present
+
+- name: Install optional Python packages in Virtual Environment
+  become: true
+  become_user: "{{ cowrie_user }}"
+  pip:
+    requirements: "{{ cowrie_location }}/requirements-output.txt"
+    virtualenv: "{{ cowrie_venv }}"
+    state: present
+
+- name: Copy config file
+  become: true
+  become_user: "{{ cowrie_user }}"
+  template:
+    src: ./cowrie.cfg.j2
+    dest: "{{ cowrie_location }}/etc/cowrie.cfg"
+
+- name: Copy user db
+  become: true
+  become_user: "{{ cowrie_user }}"
+  copy:
+    src: ./userdb.txt
+    dest: "{{ cowrie_location }}/etc/userdb.txt"
+
+- name: Copy service file
+  template:
+    src: ./cowrie.service.j2
+    dest: /etc/systemd/system/cowrie.service
+
+- name: Enable and reload cowrie service
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: cowrie

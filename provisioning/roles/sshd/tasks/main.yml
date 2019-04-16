@@ -1,0 +1,21 @@
+---
+# file: main.yml
+
+- name: Change sshd port
+  lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: "^#?PORT"
+      line: "PORT=6112"
+
+- name: Allow sshd to listen on tcp port 6112
+  seport:
+    ports: 6112
+    proto: tcp
+    setype: ssh_port_t
+    state: present
+
+- name: Restart sshd service 
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: sshd

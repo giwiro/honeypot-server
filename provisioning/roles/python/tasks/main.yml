@@ -1,0 +1,17 @@
+- name: Install the IUS (Inline with Upstream Stable) upstream
+  yum:
+    name: https://centos7.iuscommunity.org/ius-release.rpm
+    state: present
+
+- name: Ensure centos os dependencies
+  become: true
+  yum:
+    name:
+        - python-virtualenv
+        - "@Development tools"
+        - libffi
+        - libffi-devel
+        - openssl-devel
+        - snappy-devel
+    state: present
+

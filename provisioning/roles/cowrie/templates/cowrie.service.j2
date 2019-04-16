@@ -1,0 +1,27 @@
+# Initialization file for Cowrie for systemd
+
+[Unit]
+Description=Cowrie SSH/Telnet Honeypot
+Wants=network.target
+After=network.target
+
+[Service]
+Type=simple
+User={{ cowrie_user }}
+Group={{ cowrie_user }}
+WorkingDirectory={{ cowrie_location }}
+ProtectSystem=true
+
+Environment=COWRIE_VIRTUAL_ENV={{ cowrie_venv }}
+ExecStart={{ cowrie_location }}/bin/cowrie start
+# ExecStart={{ cowrie_venv }}/bin/python {{cowrie_venv}}/bin/twistd --umask 0022 --n --pidfile= -l - cowrie
+PermissionsStartOnly=yes
+Restart=always
+StateDirectory=cowrie
+LogsDirectory=cowrie
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=cowrie
+
+[Install]
+WantedBy=multi-user.target

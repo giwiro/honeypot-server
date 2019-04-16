@@ -1,0 +1,48 @@
+---
+# file: main.yml
+- name: Add required packages (epel, selinux)
+  yum:
+    name:
+      - "epel-release"
+      - "libselinux-python"
+      - "policycoreutils-python"
+    state: present
+  ignore_errors: true
+
+- name: Add Nginx official repository for CentOS
+  copy:
+    src: ./etc/yum.repos.d/nginx.repo.centos
+    dest: /etc/yum.repos.d/nginx.repo
+
+- name: Install Nginx specific version from package manager
+  yum:
+    name: nginx-{{ nginx_version }}
+    update_cache: yes
+    state: present
+
+- name: Allow Nginx to listen on tcp port 80 on SElinux
+  seport:
+    ports: 80
+    proto: tcp
+    setype: http_port_t
+    state: present
+  ignore_errors: true
+
+- name: Allow SElinux connect to network
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  ignore_errors: true
+
+- name: Copy html file
+  copy:
+    src: ./usr/share/nginx/html/index.html
+    dest: /usr/share/nginx/html/index.html
+
+- name: Restart nginx service
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: nginx
+

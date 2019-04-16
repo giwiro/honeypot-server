@@ -1,0 +1,19 @@
+[honeypot]
+sensor_name = sensor01
+hostname = localghost
+
+[ssh]
+sftp_enabled = false
+
+[telnet]
+enabled = true
+
+[output_mysql]
+host = localhost
+database = {{ cowrie_mysql_name }}
+username = {{ cowrie_mysql_user }}
+password = {{ cowrie_mysql_password }}
+port = 3306
+debug = false
+enabled = true
+

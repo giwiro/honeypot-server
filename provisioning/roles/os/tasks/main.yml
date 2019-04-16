@@ -1,0 +1,11 @@
+---
+# file: main.yml
+
+- name: Ensure cowrie user
+  user:
+    name: "{{ cowrie_user }}"
+    # shell: /sbin/nologin
+    home: "{{ cowrie_home }}"
+    comment: "Used to run Cowrie SSH Honeypot"
+    state: present
+

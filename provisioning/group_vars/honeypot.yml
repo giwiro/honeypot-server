@@ -1,0 +1,21 @@
+---
+# file: honeypot.yml
+
+# Nginx
+nginx_user: nginx
+nginx_group: nginx
+nginx_version: 1.14.2
+
+# Cowrie
+cowrie_user: cowrie
+cowrie_password: tXXYuVD4YGJWkMh9
+
+cowrie_mysql_name: cowrie
+cowrie_mysql_user: cowrie
+cowrie_mysql_password: wGEw?%44mTm.>6KW
+
+# cowrie_repo_url: https://github.com/cowrie/cowrie.git
+cowrie_repo_url: https://github.com/giwiro/cowrie.git
+cowrie_home: /opt/cowrie
+cowrie_location: /opt/cowrie/cowrie
+cowrie_venv: /opt/cowrie/cowrie/cowrie-env
