@@ -33,6 +33,13 @@
 - name: Save root password
   shell: "echo '{{ root_password.stdout }}' > /root/mysql_root_default_password"
 
+- name: Give root mysql password file 600 chmod
+  file:
+    path: /root/mysql_root_default_password
+    owner: root
+    group: root
+    mode: 0600
+
 - name: Update expired root user password
   command: mysql --user root --password={{ root_password.stdout }} --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ root_password.stdout }}';"
 
