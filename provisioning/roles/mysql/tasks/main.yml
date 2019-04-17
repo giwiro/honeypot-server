@@ -59,3 +59,15 @@
     password: "{{ cowrie_mysql_password }}"
     priv: "cowrie.*:INSERT,SELECT,UPDATE,GRANT"
     state: present
+
+- name: Listen only on localhost
+  lineinfile:
+      path: /etc/my.cnf
+      line: "bind-address=127.0.0.1"
+
+- name: Restart mysql service
+  systemd:
+    state: restarted
+    name: mysqld
+
+
