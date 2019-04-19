@@ -12,3 +12,5 @@
     to_ports: 2222
     comment: Redirect ssh traffic to port 2222
 
+- name: Save iptables
+  command: iptables-save

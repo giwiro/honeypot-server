@@ -1,0 +1,17 @@
+---
+# file: main.yml
+
+- name: Install authbind
+  yum:
+    name: https://s3.amazonaws.com/aaronsilber/public/authbind-2.1.1-0.1.x86_64.rpm
+    state: present
+
+- name: Create authbind port file
+  copy:
+    content: ""
+    dest: /etc/authbind/byport/22
+    force: no
+    group: cowrie
+    owner: cowrie
+    mode: 0770
+
