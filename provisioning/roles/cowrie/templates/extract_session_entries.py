@@ -38,18 +38,21 @@ with open(out_file, "w") as out:
     for r in rows:
         idee = r[0]
         ip = r[3]
-        os.makedirs(out_directory + "/" + idee)
         country = ""
         if ip is not None:
             match = geolite2.lookup(ip)
             if match is not None:
                 country = match.country
         if r[4] is not None:
+            os.makedirs(out_directory + "/" + idee)
             tty_location = "{{ cowrie_location }}/" + r[4]
             out_asciinema = out_directory + "/" + idee + "/tty.json"
             command = "{{ cowrie_location }}/bin/asciinema " + " -o " + out_asciinema + " " + tty_location
             # print command
-            subprocess.call(command, shell=True)
+            try:
+                subprocess.call(command)
+            except:
+                print "error"
         data = (idee, r[1], r[2], ip, country)
         writer.writerow(data)
     
