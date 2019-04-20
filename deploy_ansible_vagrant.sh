@@ -14,3 +14,6 @@ fi
 
 cd $PROVISIONING_FOLDER
 $ANSIBLE_BIN -u vagrant -i local site.yml --private-key ../.vagrant/machines/honeypot/virtualbox/private_key 
+
+# The production one should be something like this
+# ansible-playbook -u root -i production site.yml --ask-pass
