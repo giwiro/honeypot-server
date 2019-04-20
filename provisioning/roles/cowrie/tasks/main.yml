@@ -32,6 +32,14 @@
     virtualenv: "{{ cowrie_venv }}"
     state: present
 
+- name: Install geo lite 2
+  become: true
+  become_user: "{{ cowrie_user }}"
+  pip:
+    name: python-geoip-geolite2
+    virtualenv: "{{ cowrie_venv }}"
+    state: present
+
 - name: Copy config file
   become: true
   become_user: "{{ cowrie_user }}"
@@ -57,3 +65,34 @@
     enabled: yes
     daemon_reload: yes
     name: cowrie
+
+- name: Ensure script folder existence
+  file:
+    path: "{{ cowrie_scripts_location }}"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+    state: directory
+
+- name: Ensure dataset folder existence
+  file:
+    path: "{{ cowrie_dataset_location }}"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+    state: directory
+
+- name: Copy extract auth entries file
+  template:
+    src: ./extract_auth_entries.py
+    dest: "{{ cowrie_scripts_location }}/extract_auth_entries.py"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+    mode: 0770
+    
+- name: Copy extract session entries file
+  template:
+    src: ./extract_session_entries.py
+    dest: "{{ cowrie_scripts_location }}/extract_session_entries.py"
+    owner: "{{ cowrie_user }}"
+    group: "{{ cowrie_user }}"
+    mode: 0770
+    

@@ -8,7 +8,6 @@ nginx_version: 1.14.2
 
 # Cowrie
 cowrie_user: cowrie
-cowrie_password: tXXYuVD4YGJWkMh9
 
 cowrie_mysql_name: cowrie
 cowrie_mysql_user: cowrie
@@ -19,3 +18,5 @@ cowrie_repo_url: https://github.com/giwiro/cowrie.git
 cowrie_home: /opt/cowrie
 cowrie_location: /opt/cowrie/cowrie
 cowrie_venv: /opt/cowrie/cowrie/cowrie-env
+cowrie_dataset_location: /opt/cowrie/datasets
+cowrie_scripts_location: /opt/cowrie/scripts

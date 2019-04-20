@@ -12,7 +12,8 @@
 # '!' at the start of a password will not grant this password access
 # '/' can be used to write a regular expression 
 #
-root:x:*
+#root:x:*
+root:x:123456
 #root:x:!root
 #root:x:!123456
 #root:x:!/honeypot/i
