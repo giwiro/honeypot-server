@@ -11,10 +11,7 @@
 ```
 Ansible project to set up cowie, a ssh honeypot, and extract auth tries and established session information.
 
-## Interest Files
-
-
-## Deploy in real server
+# Deploy in real server
 
 In order to deploy this project in a real server, there are some requirements you need to take care:
 - Server's operating system: CentOS 7
@@ -75,3 +72,11 @@ PermitRootLogin no
 ...
 ```
 
+### 5. Enjoy
+
+------
+# Extract the dataset
+The data extraction is done by 2 files located in `/opt/cowrie/scripts`. Both files initialize the virtual environment automatically and place the results on `/opt/cowrie/datasets`.
+
+- `extract_auth_entries.py`: Extracts all unique combinations of username and password that have been tried on the honeypot.
+- `extract_session_entries.py`: Extracts all established sessions (when successfully log in) with their ip, country (geolocalized) and ttylog (if available) within a folder with the id as name.
