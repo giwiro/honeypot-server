@@ -9,7 +9,7 @@ import csv
 
 now = time.strftime("%Y%m%d-%H%M")
 
-out_file = "{{ cowrie_dataset_location }}/aut--entries-" + now + ".csv"
+out_file = "{{ cowrie_dataset_location }}/auth-entries-" + now + ".csv"
 
 conn = MySQLdb.connect(host="localhost",
         user="{{ cowrie_mysql_user }}",
